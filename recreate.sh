@@ -25,7 +25,7 @@ if [ "$line" != "dedupe	2" ]; then
     item=$(echo $line | cut -d " " -f8)
     hashFolder=$(echo $line | cut -d " " -f9 | cut -d "/" -f1)
     hashFile=$(echo $line | cut -d " " -f9 | cut -d "/" -f2)
-    if [ "$type" = "f" -a ! -z "$hashFolder" -a ! -z "$hashFile" -a -f "$3/$hashFolder/$hashFile" ]; then
+    if [ "$type" = "f" -a ! -z "$hashFolder" -a ! -z "$hashFile" ]; then
         if [ -f "$3/$hashFolder/$hashFile" ]; then
             cp "$3/$hashFolder/$hashFile" "$2/$item"
         else
