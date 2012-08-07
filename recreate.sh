@@ -33,10 +33,19 @@ if [ ! -d "$blobFolder" ]; then
     exit
 fi
 
+#Progress bar calculations
+lines=$(cat $dupFile | wc -l)
+chunk=$((lines/100))
+inc=0
+last=-1
+
 #Loop through dupFile and parse its contents.
 #Copy and rename the blobs and create the tree accordingly.
+echo -n 'Progress : ['
 while read line; do
 if [ "$line" != "dedupe	2" ]; then
+    inc=$(($inc+1))
+    prog=$(($inc / $chunk))
     type=$(echo $line | cut -d " " -f1)
     item=$(echo $line | cut -d " " -f8)
     hashFolder=$(echo $line | cut -d " " -f9 | cut -d "/" -f1)
@@ -50,5 +59,14 @@ if [ "$line" != "dedupe	2" ]; then
     else
         mkdir -p $outputFolder/$item
     fi
+    if [ $last -ne $prog ]; then
+        if [ $(($prog % 10)) -eq 0 ]; then
+            echo -n $prog%
+        elif [ $(($prog % 4)) -eq 0 ]; then
+            echo -n '.'
+        fi
+        last=$prog
+    fi
 fi
 done < "$dupFile"
+echo '] : Done'
