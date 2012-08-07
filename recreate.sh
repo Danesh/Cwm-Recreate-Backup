@@ -27,12 +27,12 @@ if [ "$line" != "dedupe	2" ]; then
     hashFile=$(echo $line | cut -d " " -f9 | cut -d "/" -f2)
     if [ "$type" = "f" -a ! -z "$hashFolder" -a ! -z "$hashFile" -a -f "$3/$hashFolder/$hashFile" ]; then
         if [ -f "$3/$hashFolder/$hashFile" ]; then
-            cp "$3/$hashFolder/$hashFile" "test/$item"
+            cp "$3/$hashFolder/$hashFile" "$2/$item"
         else
             echo "No blob for " $item " found"
         fi
     else
-        mkdir -p test/$item
+        mkdir -p $2/$item
     fi
 fi
 done < "$1"
